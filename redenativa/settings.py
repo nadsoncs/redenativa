@@ -33,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['api-redenativa.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['api-redenativa.herokuapp.com', 'api-redenativa-dev.herokuapp.com','localhost']
 #ALLOWED_HOSTS = ['localhost']
 
 # Application definition
