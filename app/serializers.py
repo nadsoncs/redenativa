@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-#from app.models import TermoUso, AceiteTermo, Organizacao, Localidade, Representante
+from rest_framework.validators import UniqueTogetherValidator
+from accounts.api.serializers import UserSerializer, RegisterSerializer
 from app.models import (
     TermoUso, 
     AceiteTermo, 
@@ -17,13 +18,27 @@ from app.models import (
     ItemAcaoDemanda,
     Encontro
 )
-from accounts.api.serializers import UserSerializer, RegisterSerializer
+
 
 class AceiteTermoSerializer (serializers.ModelSerializer):
     class Meta:
         model = AceiteTermo
-        fields = '__all__'
+        fields = ['termo', 'user']
         read_only_fields = ['user']
+        extra_kwargs = {
+            'user': {
+                'default': serializers.CreateOnlyDefault(
+                    serializers.CurrentUserDefault()
+                ),
+            }
+        }
+        validators = [
+            UniqueTogetherValidator(
+                queryset= AceiteTermo.objects.all(),
+                fields=['termo', 'user'],
+                message='Este usuário já aceitou este Termo de Uso anteriormente',
+            )
+        ]
   
     def create(self, validated_data):
         user =  self.context['request'].user
@@ -40,8 +55,8 @@ class OrganizacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organizacao
         #fields = '__all__'
-        fields = ['name', 'tipo', 'email', 'tel', 'localidade', 'logo']
-    
+        fields = ['id','name', 'tipo', 'email', 'tel', 'localidade', 'logo']
+        read_only_fields = ['id']
     def create(self, validated_data):
         localidade_data = validated_data.pop('localidade')
         localidade = Localidade.objects.create(**localidade_data)
