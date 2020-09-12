@@ -51,10 +51,14 @@ INSTALLED_APPS = [
     'knox',
     'accounts.apps.AccountsConfig',
     'dry_rest_permissions',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    ###############################
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -154,5 +158,12 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "https://redenativa.herokuapp.com",
+    "http://localhost:3000"
+]
+CSRF_TRUSTED_ORIGINS = [
+    'redenativa.herokuapp.com',
+]
 # Activate Django-Heroku.
 #django_heroku.settings(locals())
