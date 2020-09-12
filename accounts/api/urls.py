@@ -4,13 +4,15 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django.urls import path, include
-
+from rest_framework import routers
 from knox.views import LogoutView
 
-from .views import UserAPIView, RegisterAPIView, LoginAPIView
-
+from .views import UserAPIView, RegisterAPIView, LoginAPIView, UserPerfilViewSet#PerfilViewSet
+router = routers.DefaultRouter()
+router.register(r'userperfil', UserPerfilViewSet)
 urlpatterns = [
     path('', include('knox.urls')),
+    path('', include(router.urls)),
     path('user/', UserAPIView.as_view()),
     path('register/', RegisterAPIView.as_view()),
     path('login/', LoginAPIView.as_view()),

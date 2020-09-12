@@ -50,7 +50,7 @@ IMAGE_FOLDER = 'images'
 ###########################################
 
 # Create your models here.
-class Perfil(models.Model):
+"""class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tel = models.CharField(max_length=15, verbose_name='telefone')
     cpf = models.CharField(max_length=11, verbose_name='CPF')
@@ -58,7 +58,7 @@ class Perfil(models.Model):
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfis'
     def __str__(self):
-        return "%s %s" % (self.user.first_name, self.user.last_name)
+        return "%s %s" % (self.user.first_name, self.user.last_name)"""
 
 class TermoUso(models.Model):
     arquivo = models.FileField(upload_to= "", default="")

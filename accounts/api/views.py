@@ -1,11 +1,12 @@
 # accounts/api/views.py
 
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
-
+from django.contrib.auth.models import User
+from accounts.models import Perfil
 from knox.models import AuthToken
 
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from .serializers import UserSerializer, RegisterSerializer, LoginSerializer, UserPerfilSerializer #, PerfilSerializer
 
 
 class UserAPIView(generics.RetrieveAPIView):
@@ -42,3 +43,10 @@ class LoginAPIView(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": AuthToken.objects.create(user)[1]
         })
+
+class UserPerfilViewSet(viewsets.ModelViewSet):
+    serializer_class = UserPerfilSerializer
+    queryset = User.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)

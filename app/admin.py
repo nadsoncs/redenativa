@@ -1,6 +1,6 @@
 from django.contrib import admin
 from app.models import (
-    Perfil,
+#    Perfil,
     TermoUso,
     AceiteTermo, 
     TipoTerritorio, 
@@ -17,9 +17,9 @@ from app.models import (
     Encontro
 )
 # Register your models here.
-class PerfilAdmin(admin.ModelAdmin):
+"""class PerfilAdmin(admin.ModelAdmin):
     list_display = ['user', 'tel', 'cpf']
-    search_fields = ['user']
+    search_fields = ['user']"""
 
 class TermoUsoAdmin(admin.ModelAdmin):
     list_display = ['arquivo', 'data', 'is_active']
@@ -79,7 +79,7 @@ class EncontroAdmin(admin.ModelAdmin):
     list_display = ['item_oferta', 'item_demanda', 'is_total', 'data']
     list_filter = ['item_oferta', 'item_demanda']
 
-admin.site.register(Perfil, PerfilAdmin)
+#admin.site.register(Perfil, PerfilAdmin)
 admin.site.register(TermoUso, TermoUsoAdmin)
 admin.site.register(AceiteTermo, AceiteTermoAdmin)
 admin.site.register(TipoTerritorio, TipoTerritorioAdmin)

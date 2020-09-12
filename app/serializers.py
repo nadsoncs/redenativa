@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
+from accounts.models import Perfil
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from accounts.api.serializers import UserSerializer, RegisterSerializer
+from accounts.api.serializers import UserSerializer, RegisterSerializer, PerfilSerializer
 from app.models import (
     TermoUso, 
     AceiteTermo, 
@@ -66,17 +67,20 @@ class OrganizacaoSerializer(serializers.ModelSerializer):
 class OrgFullSerializer(serializers.ModelSerializer):
     organizacao = OrganizacaoSerializer()
     user = RegisterSerializer()
+    perfil = PerfilSerializer()
     class Meta:
         model = Representante
-        fields = ['user', 'cargo','organizacao']
+        fields = ['user','perfil', 'cargo','organizacao']
     
     def create(self, validated_data):
         organizacao_data = validated_data.pop('organizacao')
         localidade_data = organizacao_data.pop('localidade')
         localidade = Localidade.objects.create(**localidade_data)
         organizacao = Organizacao.objects.create(localidade=localidade, **organizacao_data)
+        perfil_data = validated_data.pop('perfil')
         user_data = validated_data.pop('user')
-        user = User.objects.create(is_active=False, **user_data)
+        user = User.objects.create_user(is_active=False, **user_data)
+        perfil = Perfil.objects.create(user=user, **perfil_data)
         representante = Representante.objects.create(organizacao=organizacao, user=user, **validated_data)
         return representante
 
