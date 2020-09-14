@@ -16,7 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from app.api import AceiteTermoViewSet, OrganizacaoViewSet, LocalidadeViewSet, OrgRegisterAPIView, ASOfertaViewSet, ItemOfertaViewSet, ItemAPIView, CategoriaAPIView, TipoTerritorioAPIView
+from app.api import (
+    AceiteTermoViewSet, 
+    OrganizacaoViewSet, 
+    LocalidadeViewSet, 
+    OrgRegisterAPIView, 
+    ASOfertaViewSet, 
+    ItemOfertaViewSet, 
+    ItemAPIView, 
+    CategoriaAPIView, 
+    TipoTerritorioAPIView,
+    MyOrganizacaoAPIView
+#    MyOrganizacaoViewSet
+)
 #Arquivos estáticos
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,6 +40,7 @@ router.register(r'organizacao', OrganizacaoViewSet)
 router.register(r'localidade', LocalidadeViewSet)
 router.register(r'asoferta', ASOfertaViewSet)
 router.register(r'itemoferta', ItemOfertaViewSet)
+#router.register(r'myorg', MyOrganizacaoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
@@ -37,4 +50,6 @@ urlpatterns = [
     path('item/', ItemAPIView.as_view()),
     path('categoria/', CategoriaAPIView.as_view()),
     path('territorio/', TipoTerritorioAPIView.as_view()),
+    path('myorg/', MyOrganizacaoAPIView.as_view()),
+#   path('myorg/', MyOrganizacaoAPIView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

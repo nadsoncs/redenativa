@@ -24,8 +24,8 @@ from app.models import (
 class AceiteTermoSerializer (serializers.ModelSerializer):
     class Meta:
         model = AceiteTermo
-        fields = ['termo', 'user']
-        read_only_fields = ['user']
+        fields = ['id','termo', 'user']
+        read_only_fields = ['id','user']
         extra_kwargs = {
             'user': {
                 'default': serializers.CreateOnlyDefault(
@@ -83,6 +83,13 @@ class OrgFullSerializer(serializers.ModelSerializer):
         perfil = Perfil.objects.create(user=user, **perfil_data)
         representante = Representante.objects.create(organizacao=organizacao, user=user, **validated_data)
         return representante
+
+class RepresentanteSerializer(serializers.ModelSerializer):
+    organizacao = OrganizacaoSerializer()
+    class Meta:
+        model = Representante
+        fields = ['user', 'cargo', 'organizacao']
+        read_only_fields = ['user']
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:

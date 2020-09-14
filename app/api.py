@@ -2,9 +2,21 @@ from rest_framework import viewsets, generics, permissions
 from dry_rest_permissions.generics import DRYPermissions, DRYObjectPermissions
 from rest_framework.response import Response
 from accounts.api.serializers import UserSerializer
+from django.shortcuts import get_object_or_404
 #from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
-from app.models import TermoUso, AceiteTermo, Organizacao, Localidade, AcaoSolidariaOferta, ItemAcaoOferta, Item, Categoria, TipoTerritorio
-from app.serializers import AceiteTermoSerializer, OrganizacaoSerializer, LocalidadeSerializer, OrgFullSerializer, ASOfertaSerializer, ItemOfertaSerializer, ItemSerializer, CategoriaSerializer, TipoTerritorioSerializer
+from app.models import TermoUso, AceiteTermo, Organizacao, Localidade, AcaoSolidariaOferta, ItemAcaoOferta, Item, Categoria, TipoTerritorio, Representante
+from app.serializers import (
+    AceiteTermoSerializer, 
+    OrganizacaoSerializer, 
+    LocalidadeSerializer, 
+    OrgFullSerializer, 
+    ASOfertaSerializer, 
+    ItemOfertaSerializer, 
+    ItemSerializer, 
+    CategoriaSerializer, 
+    TipoTerritorioSerializer,
+    RepresentanteSerializer
+)
 
 
 class AceiteTermoViewSet (viewsets.ModelViewSet):
@@ -21,8 +33,16 @@ class LocalidadeViewSet(viewsets.ModelViewSet):
 
 
 class OrganizacaoViewSet(viewsets.ModelViewSet):
-    serializer_class = OrganizacaoSerializer
+    serializer_class = RepresentanteSerializer
     queryset = Organizacao.objects.all()
+
+class MyOrganizacaoAPIView(generics.RetrieveUpdateAPIView):
+#class MyOrganizacaoViewSet(viewsets.ModelViewSet):
+    serializer_class = RepresentanteSerializer
+    queryset = Representante.objects.all()
+    def get_object(self):
+        user = self.request.user
+        return get_object_or_404(Representante, user=user)
 
 class ItemAPIView(generics.ListCreateAPIView):
     serializer_class = ItemSerializer
