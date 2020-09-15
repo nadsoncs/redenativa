@@ -90,6 +90,31 @@ class RepresentanteSerializer(serializers.ModelSerializer):
         model = Representante
         fields = ['user', 'cargo', 'organizacao']
         read_only_fields = ['user']
+    
+    def update(self, instance, validated_data):
+        organizacao_data = validated_data.pop('organizacao')
+        localidade_data = organizacao_data.pop('localidade')
+        
+        organizacao = instance.organizacao
+        localidade = instance.organizacao.localidade
+        
+        instance.cargo = validated_data.get('cargo', instance.cargo)
+
+        organizacao.name = organizacao_data.get('name', organizacao.name)
+        organizacao.tipo = organizacao_data.get('tipo', organizacao.tipo)
+        organizacao.email = organizacao_data.get('email', organizacao.email)
+        organizacao.tel = organizacao_data.get('tel', organizacao.tel)
+        organizacao.logo = organizacao_data.get('logo', organizacao.logo)
+        organizacao.save()
+
+        localidade.estado = localidade_data.get('estado', localidade.estado)
+        localidade.cidade = localidade_data.get('cidade', localidade.cidade)
+        localidade.bairro = localidade_data.get('bairro', localidade.bairro)
+        localidade.cep = localidade_data.get('cep', localidade.cep)
+        localidade.tipo = localidade_data.get('tipo', localidade.tipo)
+        localidade.save()
+
+        return instance
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:

@@ -61,6 +61,33 @@ class UserPerfilSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'perfil']
         read_only_fields = ['id']
+    
+    def update(self, instance, validated_data):
+        perfil_data = validated_data.pop('perfil')
+        perfil = instance.perfil
+
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.save()
+
+        perfil.cpf = perfil_data.get('cpf', perfil.cpf)
+        perfil.tel = perfil_data.get('tel', perfil.tel)
+        perfil.save()
+
+        return instance
+"""
+        profile.is_premium_member = profile_data.get(
+            'is_premium_member',
+            profile.is_premium_member
+        )
+        profile.has_support_contract = profile_data.get(
+            'has_support_contract',
+            profile.has_support_contract
+         )
+         """
+        
 """    
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)

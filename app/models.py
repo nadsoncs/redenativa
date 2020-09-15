@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .managers import OrgManager
 ###########################################
 ########
 STATES_CHOICES = (
@@ -125,6 +126,8 @@ class Organizacao(models.Model):
     localidade = models.ForeignKey(Localidade, on_delete=models.PROTECT)
     logo = models.ImageField(upload_to=IMAGE_FOLDER, height_field=None, width_field=None, blank=True)
 
+    #my_objects = OrgManager()
+    #objects = OrgManager()
     def __str__(self):
         return self.name
 
