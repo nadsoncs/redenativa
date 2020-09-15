@@ -149,10 +149,19 @@ class ASOfertaSerializer(serializers.ModelSerializer):
     """
     Colocar a organização de forma dinâmica baseada no usuário logado
     """
+    localidade = LocalidadeSerializer()
     class Meta:
         model = AcaoSolidariaOferta
-        fields = '__all__'
-        #fields = ('name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade', 'itens_acao')
+        #fields = '__all__'
+        fields = ['name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade']
+        read_only_fields = ['id', 'organizacao']
+    def create(self, validated_data):
+        user =  self.context['request'].user
+        organizacao = Organizacao.objects.get(representante__user = user)
+        localidade_data = validated_data.pop('localidade')
+        localidade = Localidade.objects.create(**localidade_data)
+        acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
+        return acao_oferta
     
 class ASDemandaSerializer(serializers.ModelSerializer):
     class Meta:

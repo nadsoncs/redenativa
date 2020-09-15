@@ -39,15 +39,7 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
-"""
-class PerfilSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer()
-    class Meta:
-        model = Perfil
-        #fields = '__all__'
-        fields =  ['id','cpf', 'tel','user']
-        read_only_fields = ['id']
-"""
+
 class PerfilSerializer(serializers.ModelSerializer):
     class Meta:
         model = Perfil
@@ -77,24 +69,3 @@ class UserPerfilSerializer(serializers.ModelSerializer):
         perfil.save()
 
         return instance
-"""
-        profile.is_premium_member = profile_data.get(
-            'is_premium_member',
-            profile.is_premium_member
-        )
-        profile.has_support_contract = profile_data.get(
-            'has_support_contract',
-            profile.has_support_contract
-         )
-         """
-        
-"""    
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.code = validated_data.get('code', instance.code)
-        instance.linenos = validated_data.get('linenos', instance.linenos)
-        instance.language = validated_data.get('language', instance.language)
-        instance.style = validated_data.get('style', instance.style)
-        instance.save()
-        return instance
-"""

@@ -139,7 +139,11 @@ class Representante(models.Model):
     cargo = models.CharField(max_length=100, verbose_name='cargo')
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     organizacao = models.ForeignKey(Organizacao, on_delete=models.PROTECT)
-
+"""
+    def get_myorg(self, user):
+        #one_entry = Entry.objects.get(pk=1)
+        organizacao = Organizacao.objects.get(representante__user = user)
+"""
 class Categoria(models.Model):
     name = models.CharField(max_length=100, verbose_name='nome')
     is_active = models.BooleanField(default=False, verbose_name='ativo?')
