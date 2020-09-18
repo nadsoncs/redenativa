@@ -213,8 +213,8 @@ class ItemAcaoOferta(models.Model):
         return "%s | %s" % (self.a_s_oferta.name, self.item)
     
     class Meta:
-        verbose_name = "item da ação solidaria"
-        verbose_name_plural = "itens da ação solidaria"
+        verbose_name = "item da ação solidaria - oferta"
+        verbose_name_plural = "itens da ação solidaria - oferta"
 
 class ItemAcaoDemanda(models.Model):
     a_s_demanda = models.ForeignKey(AcaoSolidariaDemanda, on_delete=models.PROTECT)
@@ -227,8 +227,8 @@ class ItemAcaoDemanda(models.Model):
         return "%s | %s" % (self.a_s_demanda, self.item)
     
     class Meta:
-        verbose_name = "item da ação solidaria"
-        verbose_name_plural = "itens da ação solidaria"
+        verbose_name = "item da ação solidaria - demanda"
+        verbose_name_plural = "itens da ação solidaria - demanda"
 
 class Encontro(models.Model):
     item_oferta = models.ForeignKey(ItemAcaoOferta, on_delete=models.PROTECT)
@@ -241,4 +241,24 @@ class Encontro(models.Model):
 
     def __str__(self):
         return "%s | %s" % (self.item_oferta, self.item_demanda)
+
+class Indicacao(models.Model):
+    #dados de quem indica
+    myname = models.CharField(max_length=100, verbose_name='indicado por')
+    email = models.EmailField(max_length=128, verbose_name='email')
+    myfone = models.CharField(max_length=15, verbose_name='telefone pessoal')
+    #dados de empresa indicada
+    organizacao = models.CharField(max_length=100, verbose_name='organização')
+    email_org = models.EmailField(max_length=128, verbose_name='email organização', blank=True)
+    tel_org = models.CharField(max_length=15, verbose_name='telefone organização', blank=True)
+    #dados da ação solidária
+    acao_solidaria = models.CharField(max_length=100, verbose_name='ação solidaria')
+    descrição = models.TextField()
+    data = models.DateField(auto_now = True)
+    is_new = models.BooleanField(default=True, verbose_name='novo?')
+
+    class Meta:
+        verbose_name = "indicação"
+        verbose_name_plural = "indicações"
+
         

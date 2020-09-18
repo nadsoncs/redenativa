@@ -22,12 +22,14 @@ from app.api import (
     LocalidadeViewSet, 
     OrgRegisterAPIView, 
     ASOfertaViewSet, 
-    ItemOfertaViewSet, 
+    ItemOfertaViewSet,
+    ItemDemandaViewSet, 
     ItemAPIView, 
     CategoriaAPIView, 
     TipoTerritorioAPIView,
-    MyOrganizacaoAPIView
-#    MyOrganizacaoViewSet
+    MyOrganizacaoAPIView,
+    ASDemandaViewSet,
+    IndicacaoAPIView
 )
 #Arquivos estáticos
 from django.conf import settings
@@ -40,7 +42,8 @@ router.register(r'organizacao', OrganizacaoViewSet)
 router.register(r'localidade', LocalidadeViewSet)
 router.register(r'asoferta', ASOfertaViewSet)
 router.register(r'itemoferta', ItemOfertaViewSet)
-#router.register(r'myorg', MyOrganizacaoViewSet)
+router.register(r'asdemanda', ASDemandaViewSet)
+router.register(r'itemdemanda', ItemDemandaViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
@@ -51,5 +54,5 @@ urlpatterns = [
     path('categoria/', CategoriaAPIView.as_view()),
     path('territorio/', TipoTerritorioAPIView.as_view()),
     path('myorg/', MyOrganizacaoAPIView.as_view()),
-#   path('myorg/', MyOrganizacaoAPIView.as_view()),
+   path('indicacao/', IndicacaoAPIView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

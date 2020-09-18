@@ -14,7 +14,8 @@ from app.models import (
     Item,
     ItemAcaoOferta,
     ItemAcaoDemanda,
-    Encontro
+    Encontro,
+    Indicacao
 )
 # Register your models here.
 """class PerfilAdmin(admin.ModelAdmin):
@@ -79,7 +80,12 @@ class EncontroAdmin(admin.ModelAdmin):
     list_display = ['item_oferta', 'item_demanda', 'is_total', 'data']
     list_filter = ['item_oferta', 'item_demanda']
 
-#admin.site.register(Perfil, PerfilAdmin)
+class IndicacaoAdmin(admin.ModelAdmin):
+    list_display = ['myname', 'email', 'myfone', 'organizacao', 'email_org', 'tel_org', 'acao_solidaria', 'data', 'is_new']
+    list_filter = ['data', 'is_new']
+    search_fields = ['myname', 'organizacao']
+
+admin.site.register(Indicacao, IndicacaoAdmin)
 admin.site.register(TermoUso, TermoUsoAdmin)
 admin.site.register(AceiteTermo, AceiteTermoAdmin)
 admin.site.register(TipoTerritorio, TipoTerritorioAdmin)

@@ -4,18 +4,35 @@ from rest_framework.response import Response
 from accounts.api.serializers import UserSerializer
 from django.shortcuts import get_object_or_404
 #from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
-from app.models import TermoUso, AceiteTermo, Organizacao, Localidade, AcaoSolidariaOferta, ItemAcaoOferta, Item, Categoria, TipoTerritorio, Representante
+from app.models import (
+    TermoUso, 
+    AceiteTermo, 
+    Organizacao, 
+    Localidade, 
+    AcaoSolidariaOferta, 
+    ItemAcaoOferta, 
+    ItemAcaoDemanda, 
+    AcaoSolidariaDemanda, 
+    Item, 
+    Categoria, 
+    TipoTerritorio, 
+    Representante,
+    Indicacao
+)
 from app.serializers import (
     AceiteTermoSerializer, 
     OrganizacaoSerializer, 
     LocalidadeSerializer, 
     OrgFullSerializer, 
-    ASOfertaSerializer, 
-    ItemOfertaSerializer, 
+    ASOfertaSerializer,
+    ASDemandaSerializer, 
+    ItemOfertaSerializer,
+    ItemDemandaSerializer, 
     ItemSerializer, 
     CategoriaSerializer, 
     TipoTerritorioSerializer,
-    RepresentanteSerializer
+    RepresentanteSerializer,
+    IndicacaoSerializer
 )
 
 
@@ -75,3 +92,16 @@ class ASOfertaViewSet(viewsets.ModelViewSet):
 class ItemOfertaViewSet(viewsets.ModelViewSet):
     serializer_class = ItemOfertaSerializer
     queryset = ItemAcaoOferta.objects.all()
+
+class ItemDemandaViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemDemandaSerializer
+    queryset = ItemAcaoDemanda.objects.all()
+
+class ASDemandaViewSet(viewsets.ModelViewSet):
+    serializer_class = ASDemandaSerializer
+    queryset = AcaoSolidariaDemanda.objects.all()
+
+class IndicacaoAPIView(generics.CreateAPIView):
+    serializer_class = IndicacaoSerializer
+    permission_classes = (permissions.AllowAny,)
+    queryset = Indicacao.objects.all()

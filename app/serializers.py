@@ -17,7 +17,8 @@ from app.models import (
     Item,
     ItemAcaoOferta,
     ItemAcaoDemanda,
-    Encontro
+    Encontro,
+    Indicacao
 )
 
 
@@ -134,26 +135,21 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ItemOfertaSerializer(serializers.ModelSerializer):
-    #item = ItemSerializer(many=True)
     class Meta:
         model = ItemAcaoOferta
-        fields = ['a_s_oferta', 'item', 'qtd_inicial']
-        #fields = '__all__'
-    """
+        fields = ['id', 'a_s_oferta', 'item', 'qtd_inicial', 'saldo']
+        read_only_fields = ['id', 'saldo']
     def create(self, validated_data):
-        itens_data = validated_data.pop('item')
-        for item_data in itens_data:
-            Item.objects.create(**itens_data)
-    """
+        saldo = validated_data['qtd_inicial']
+        item_acao = ItemAcaoOferta.objects.create(saldo=saldo, **validated_data)
+        return item_acao
+
 class ASOfertaSerializer(serializers.ModelSerializer):
-    """
-    Colocar a organização de forma dinâmica baseada no usuário logado
-    """
     localidade = LocalidadeSerializer()
     class Meta:
         model = AcaoSolidariaOferta
         #fields = '__all__'
-        fields = ['name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade']
+        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade']
         read_only_fields = ['id', 'organizacao']
     def create(self, validated_data):
         user =  self.context['request'].user
@@ -166,14 +162,33 @@ class ASOfertaSerializer(serializers.ModelSerializer):
 class ASDemandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcaoSolidariaDemanda
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['id','name', 'descricao', 'is_covid', 'num_familias','data', 'validade', 'organizacao', 'categoria']
+        read_only_fields = ['id', 'organizacao']
+    def create(self, validated_data):
+        user =  self.context['request'].user
+        organizacao = Organizacao.objects.get(representante__user = user)
+        acao_demanda = AcaoSolidariaDemanda.objects.create(organizacao=organizacao, **validated_data)
+        return acao_demanda
 
 class ItemDemandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAcaoDemanda
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['id', 'a_s_demanda', 'item', 'qtd_inicial', 'saldo']
+        read_only_fields = ['id', 'saldo']
+    def create(self, validated_data):
+        saldo = validated_data['qtd_inicial']
+        item_acao = ItemAcaoDemanda.objects.create(saldo=saldo, **validated_data)
+        return item_acao
 
 class EncontroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Encontro
         fields = '__all__'
+
+class IndicacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Indicacao
+        fields = ['myname', 'email', 'myfone', 'organizacao', 'email_org', 'tel_org', 'acao_solidaria', 'descrição']
+        #fields = '__all__'
