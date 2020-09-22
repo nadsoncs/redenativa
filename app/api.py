@@ -70,6 +70,7 @@ class CategoriaAPIView(generics.ListCreateAPIView):
     queryset = Categoria.objects.all()
 
 class TipoTerritorioAPIView(generics.ListCreateAPIView):
+    permission_classes = (permissions.AllowAny,)
     serializer_class = TipoTerritorioSerializer
     queryset = TipoTerritorio.objects.all()
 

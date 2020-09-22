@@ -32,6 +32,8 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=123456
     ports:
       - "9000:80"
+    volumes:
+        - ./pgadmin:/var/lib/pgadmin/storage/admin_user.com
 
 volumes:
   iniciando-django-pgdata:

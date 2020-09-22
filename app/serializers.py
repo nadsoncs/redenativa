@@ -69,9 +69,10 @@ class OrgFullSerializer(serializers.ModelSerializer):
     organizacao = OrganizacaoSerializer()
     user = RegisterSerializer()
     perfil = PerfilSerializer()
+    aceite = AceiteTermoSerializer()
     class Meta:
         model = Representante
-        fields = ['user','perfil', 'cargo','organizacao']
+        fields = ['user','perfil', 'cargo','organizacao', 'aceite']
     
     def create(self, validated_data):
         organizacao_data = validated_data.pop('organizacao')
@@ -82,6 +83,8 @@ class OrgFullSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         user = User.objects.create_user(is_active=False, **user_data)
         perfil = Perfil.objects.create(user=user, **perfil_data)
+        aceite_data = validated_data.pop('aceite')
+        aceite = AceiteTermo.objects.create(user=user, **aceite_data)
         representante = Representante.objects.create(organizacao=organizacao, user=user, **validated_data)
         return representante
 
