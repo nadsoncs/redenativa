@@ -23,7 +23,8 @@ from app.serializers import (
     AceiteTermoSerializer, 
     OrganizacaoSerializer, 
     LocalidadeSerializer, 
-    OrgFullSerializer, 
+    OrgFullSerializer,
+    OrgMimSerializer, 
     ASOfertaSerializer,
     ASDemandaSerializer, 
     ItemOfertaSerializer,
@@ -50,8 +51,17 @@ class LocalidadeViewSet(viewsets.ModelViewSet):
 
 
 class OrganizacaoViewSet(viewsets.ModelViewSet):
-    serializer_class = RepresentanteSerializer
+    serializer_class = OrganizacaoSerializer
     queryset = Organizacao.objects.all()
+
+class OrgMinAPIView(generics.ListAPIView):
+    serializer_class = OrgMimSerializer
+    def get_queryset(self):
+        queryset = Organizacao.objects.all()
+        tipo = self.request.query_params.get('tipo', None)
+        if tipo is not None:
+            queryset = queryset.filter(tipo=tipo)
+        return queryset
 
 class MyOrganizacaoAPIView(generics.RetrieveUpdateAPIView):
 #class MyOrganizacaoViewSet(viewsets.ModelViewSet):
@@ -63,9 +73,17 @@ class MyOrganizacaoAPIView(generics.RetrieveUpdateAPIView):
 
 class ItemAPIView(generics.ListCreateAPIView):
     serializer_class = ItemSerializer
-    queryset = Item.objects.all()
+    #queryset = Item.objects.all()
+
+    def get_queryset(self):
+        queryset = Item.objects.all()
+        categoria = self.request.query_params.get('categoria', None)
+        if categoria is not None:
+            queryset = queryset.filter(categoria=categoria)
+        return queryset
 
 class CategoriaAPIView(generics.ListCreateAPIView):
+    pagination_class = None
     serializer_class = CategoriaSerializer
     queryset = Categoria.objects.all()
 

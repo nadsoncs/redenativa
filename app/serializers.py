@@ -65,6 +65,13 @@ class OrganizacaoSerializer(serializers.ModelSerializer):
         organizacao = Organizacao.objects.create(localidade=localidade, **validated_data)
         return organizacao
 
+class OrgMimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organizacao
+        #fields = '__all__'
+        fields = ['id','name']
+        read_only_fields = ['id', 'name']
+
 class OrgFullSerializer(serializers.ModelSerializer):
     organizacao = OrganizacaoSerializer()
     user = RegisterSerializer()
