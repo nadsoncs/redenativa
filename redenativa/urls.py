@@ -24,6 +24,8 @@ from app.api import (
     OrgMinAPIView, 
     ASOfertaViewSet, 
     ItemOfertaViewSet,
+    AsoItemViewSet,
+    AsdItemViewSet,
     ItemDemandaViewSet, 
     ItemAPIView, 
     CategoriaAPIView, 
@@ -45,6 +47,8 @@ router.register(r'asoferta', ASOfertaViewSet)
 router.register(r'itemoferta', ItemOfertaViewSet)
 router.register(r'asdemanda', ASDemandaViewSet)
 router.register(r'itemdemanda', ItemDemandaViewSet)
+router.register(r'asoitem', AsoItemViewSet)
+router.register(r'asditem', AsdItemViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),

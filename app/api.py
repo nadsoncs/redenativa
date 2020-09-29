@@ -26,7 +26,9 @@ from app.serializers import (
     OrgFullSerializer,
     OrgMimSerializer, 
     ASOfertaSerializer,
-    ASDemandaSerializer, 
+    AsoItemSerializer,
+    ASDemandaSerializer,
+    AsdItemSerializer, 
     ItemOfertaSerializer,
     ItemDemandaSerializer, 
     ItemSerializer, 
@@ -48,7 +50,7 @@ class AceiteTermoViewSet (viewsets.ModelViewSet):
 class LocalidadeViewSet(viewsets.ModelViewSet):
     serializer_class = LocalidadeSerializer
     queryset = Localidade.objects.all()
-
+##CRIAR VIEWSET DE COORDENADAS
 
 class OrganizacaoViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizacaoSerializer
@@ -56,6 +58,7 @@ class OrganizacaoViewSet(viewsets.ModelViewSet):
 
 class OrgMinAPIView(generics.ListAPIView):
     serializer_class = OrgMimSerializer
+    permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
         queryset = Organizacao.objects.all()
         tipo = self.request.query_params.get('tipo', None)
@@ -108,6 +111,10 @@ class ASOfertaViewSet(viewsets.ModelViewSet):
     serializer_class = ASOfertaSerializer
     queryset = AcaoSolidariaOferta.objects.all()
 
+class AsoItemViewSet(viewsets.ModelViewSet):
+    serializer_class = AsoItemSerializer
+    queryset = AcaoSolidariaOferta.objects.all()
+
 class ItemOfertaViewSet(viewsets.ModelViewSet):
     serializer_class = ItemOfertaSerializer
     queryset = ItemAcaoOferta.objects.all()
@@ -117,7 +124,12 @@ class ItemDemandaViewSet(viewsets.ModelViewSet):
     queryset = ItemAcaoDemanda.objects.all()
 
 class ASDemandaViewSet(viewsets.ModelViewSet):
-    serializer_class = ASDemandaSerializer
+    serializer_class = AsdItemSerializer
+    queryset = AcaoSolidariaDemanda.objects.all()
+
+#CRIAR ROTAS DAS AS JÁ COM OS ITENS
+class AsdItemViewSet(viewsets.ModelViewSet):
+    serializer_class = AsdItemSerializer
     queryset = AcaoSolidariaDemanda.objects.all()
 
 class IndicacaoAPIView(generics.CreateAPIView):

@@ -148,7 +148,7 @@ class ItemOfertaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAcaoOferta
         fields = ['id', 'a_s_oferta', 'item', 'qtd_inicial', 'saldo']
-        read_only_fields = ['id', 'saldo']
+        read_only_fields = ['id', 'saldo', 'a_s_oferta']
     def create(self, validated_data):
         saldo = validated_data['qtd_inicial']
         item_acao = ItemAcaoOferta.objects.create(saldo=saldo, **validated_data)
@@ -168,7 +168,27 @@ class ASOfertaSerializer(serializers.ModelSerializer):
         localidade = Localidade.objects.create(**localidade_data)
         acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
         return acao_oferta
-    
+#Ação Solidária de Oferta + Itens
+class AsoItemSerializer(serializers.ModelSerializer):
+    localidade = LocalidadeSerializer()
+    itens_acao = ItemOfertaSerializer(many=True)
+    class Meta:
+        model = AcaoSolidariaOferta
+        #fields = '__all__'
+        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade', 'itens_acao']
+        read_only_fields = ['id', 'organizacao']
+    def create(self, validated_data):
+        user =  self.context['request'].user
+        organizacao = Organizacao.objects.get(representante__user = user)
+        itens_acao_data = validated_data.pop('itens_acao')
+        localidade_data = validated_data.pop('localidade')
+        localidade = Localidade.objects.create(**localidade_data)
+        acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
+        for item_acao_data in itens_acao_data:
+            saldo = item_acao_data['qtd_inicial']
+            ItemAcaoOferta.objects.create(a_s_oferta=acao_oferta, saldo=saldo, **item_acao_data)
+        return acao_oferta
+
 class ASDemandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcaoSolidariaDemanda
@@ -186,11 +206,29 @@ class ItemDemandaSerializer(serializers.ModelSerializer):
         model = ItemAcaoDemanda
         #fields = '__all__'
         fields = ['id', 'a_s_demanda', 'item', 'qtd_inicial', 'saldo']
-        read_only_fields = ['id', 'saldo']
+        read_only_fields = ['id', 'saldo', 'a_s_demanda']
     def create(self, validated_data):
         saldo = validated_data['qtd_inicial']
         item_acao = ItemAcaoDemanda.objects.create(saldo=saldo, **validated_data)
         return item_acao
+
+#Ação Solidária de Oferta + Itens
+class AsdItemSerializer(serializers.ModelSerializer):
+    itens_acao = ItemDemandaSerializer(many=True)
+    class Meta:
+        model = AcaoSolidariaDemanda
+        #fields = '__all__'
+        fields = ['id','name', 'descricao', 'is_covid', 'num_familias', 'data', 'validade', 'organizacao', 'categoria', 'itens_acao']
+        read_only_fields = ['id', 'organizacao']
+    def create(self, validated_data):
+        user =  self.context['request'].user
+        organizacao = Organizacao.objects.get(representante__user = user)
+        itens_acao_data = validated_data.pop('itens_acao')
+        acao_demanda = AcaoSolidariaDemanda.objects.create(organizacao=organizacao, **validated_data)
+        for item_acao_data in itens_acao_data:
+            saldo = item_acao_data['qtd_inicial']
+            ItemAcaoDemanda.objects.create(a_s_demanda=acao_demanda, saldo=saldo, **item_acao_data)
+        return acao_demanda
 
 class EncontroSerializer(serializers.ModelSerializer):
     class Meta:
@@ -202,3 +240,8 @@ class IndicacaoSerializer(serializers.ModelSerializer):
         model = Indicacao
         fields = ['myname', 'email', 'myfone', 'organizacao', 'email_org', 'tel_org', 'acao_solidaria', 'descrição']
         #fields = '__all__'
+
+class CoordenadaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coordenada
+        fields = '__all__'

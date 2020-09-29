@@ -51,15 +51,7 @@ IMAGE_FOLDER = 'images'
 ###########################################
 
 # Create your models here.
-"""class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    tel = models.CharField(max_length=15, verbose_name='telefone')
-    cpf = models.CharField(max_length=11, verbose_name='CPF')
-    class Meta:
-        verbose_name = 'Perfil'
-        verbose_name_plural = 'Perfis'
-    def __str__(self):
-        return "%s %s" % (self.user.first_name, self.user.last_name)"""
+
 
 class TermoUso(models.Model):
     arquivo = models.FileField(upload_to= "", default="")
@@ -113,6 +105,7 @@ class Localidade(models.Model):
         return "%s-%s, %s" % (self.cidade, self.estado, self.bairro)
 
 class Coordenada(models.Model):
+    localidade = models.OneToOneField(Localidade, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
     raio = models.FloatField()
@@ -125,9 +118,7 @@ class Organizacao(models.Model):
     is_active = models.BooleanField(default=True, verbose_name='ativo?')
     localidade = models.ForeignKey(Localidade, on_delete=models.PROTECT)
     logo = models.ImageField(upload_to=IMAGE_FOLDER, height_field=None, width_field=None, blank=True)
-
-    #my_objects = OrgManager()
-    #objects = OrgManager()
+    
     def __str__(self):
         return self.name
 
@@ -139,11 +130,7 @@ class Representante(models.Model):
     cargo = models.CharField(max_length=100, verbose_name='cargo')
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     organizacao = models.ForeignKey(Organizacao, on_delete=models.PROTECT)
-"""
-    def get_myorg(self, user):
-        #one_entry = Entry.objects.get(pk=1)
-        organizacao = Organizacao.objects.get(representante__user = user)
-"""
+
 class Categoria(models.Model):
     name = models.CharField(max_length=100, verbose_name='nome')
     is_active = models.BooleanField(default=False, verbose_name='ativo?')
@@ -162,7 +149,6 @@ class AcaoSolidariaOferta(models.Model):
     data = models.DateField(auto_now = True)
     validade = models.DateField(auto_now = False , auto_now_add = False, blank=True)
     organizacao = models.ForeignKey(Organizacao, on_delete=models.PROTECT)
-    #localidade = models.ForeignKey(Localidade, on_delete=models.CASCADE)
     localidade = models.OneToOneField(Localidade, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
 
@@ -217,7 +203,7 @@ class ItemAcaoOferta(models.Model):
         verbose_name_plural = "itens da ação solidaria - oferta"
 
 class ItemAcaoDemanda(models.Model):
-    a_s_demanda = models.ForeignKey(AcaoSolidariaDemanda, on_delete=models.PROTECT)
+    a_s_demanda = models.ForeignKey(AcaoSolidariaDemanda, related_name='itens_acao', on_delete=models.PROTECT)
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     qtd_inicial = models.PositiveSmallIntegerField()
     saldo = models.PositiveSmallIntegerField()
