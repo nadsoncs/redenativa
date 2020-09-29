@@ -111,9 +111,23 @@ class ASOfertaViewSet(viewsets.ModelViewSet):
     serializer_class = ASOfertaSerializer
     queryset = AcaoSolidariaOferta.objects.all()
 
+    def get_queryset(self):
+        queryset = AcaoSolidariaOferta.objects.all()
+        org = self.request.query_params.get('organizacao', None)
+        if org is not None:
+            queryset = queryset.filter(organizacao=org)
+        return queryset
+
 class AsoItemViewSet(viewsets.ModelViewSet):
     serializer_class = AsoItemSerializer
     queryset = AcaoSolidariaOferta.objects.all()
+
+    def get_queryset(self):
+        queryset = AcaoSolidariaOferta.objects.all()
+        org = self.request.query_params.get('organizacao', None)
+        if org is not None:
+            queryset = queryset.filter(organizacao=org)
+        return queryset
 
 class ItemOfertaViewSet(viewsets.ModelViewSet):
     serializer_class = ItemOfertaSerializer
@@ -127,10 +141,24 @@ class ASDemandaViewSet(viewsets.ModelViewSet):
     serializer_class = AsdItemSerializer
     queryset = AcaoSolidariaDemanda.objects.all()
 
+    def get_queryset(self):
+        queryset = AcaoSolidariaDemanda.objects.all()
+        org = self.request.query_params.get('organizacao', None)
+        if org is not None:
+            queryset = queryset.filter(organizacao=org)
+        return queryset
+
 #CRIAR ROTAS DAS AS JÁ COM OS ITENS
 class AsdItemViewSet(viewsets.ModelViewSet):
     serializer_class = AsdItemSerializer
     queryset = AcaoSolidariaDemanda.objects.all()
+
+    def get_queryset(self):
+        queryset = AcaoSolidariaDemanda.objects.all()
+        org = self.request.query_params.get('organizacao', None)
+        if org is not None:
+            queryset = queryset.filter(organizacao=org)
+        return queryset
 
 class IndicacaoAPIView(generics.CreateAPIView):
     serializer_class = IndicacaoSerializer
