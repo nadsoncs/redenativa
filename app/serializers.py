@@ -55,14 +55,22 @@ class LocalidadeSerializer(serializers.ModelSerializer):
 class CoordenadaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordenada
+        #fields = ['latitude', 'longitude', 'raio']
         fields = '__all__'
         read_only_fields = ['id', 'raio']
 
-class LocalidadeCoordenadasSerializer(serializers.ModelSerializer):
-    localidade = LocalidadeSerializer()
+class CoordenadaAuxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordenada
-        fields = ['id', 'localidade', 'latitude', 'longitude']
+        fields = ['latitude', 'longitude', 'raio']
+        #fields = '__all__'
+        read_only_fields = ['id', 'raio']
+
+class LocalidadeCoordenadasSerializer(serializers.ModelSerializer):
+    coordenada = CoordenadaAuxSerializer()
+    class Meta:
+        model = Localidade
+        fields = ['id', 'estado', 'cidade', 'bairro', 'cep', 'tipo', 'coordenada']
         read_only_fields = ['id']
     def create(self, validated_data):
         localidade_data = validated_data.pop('localidade')
@@ -173,42 +181,38 @@ class ItemOfertaSerializer(serializers.ModelSerializer):
         return item_acao
 
 class ASOfertaSerializer(serializers.ModelSerializer):
-    localidade_coordenada = LocalidadeCoordenadasSerializer()
+    localidade = LocalidadeCoordenadasSerializer()
     class Meta:
         model = AcaoSolidariaOferta
         #fields = '__all__'
-        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade_coordenada']
+        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade']
         read_only_fields = ['id', 'organizacao']
     def create(self, validated_data):
         user =  self.context['request'].user
         organizacao = Organizacao.objects.get(representante__user = user)
-        localidade_coordenada_data = validated_data.pop('localidade_coordenada')
-        localidade_data = localidade_coordenada_data.pop('localidade')
-        #coordenadas_data = localidade_coordenada_data.pop('coordenadas')
+        localidade_data = validated_data.pop('localidade')
+        coordenadas_data = localidade_data.pop('coordenadas')
         localidade = Localidade.objects.create(**localidade_data)
         coordenadas = Coordenada.objects.create(localidade, **localidade_coordenada_data)
         acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
         return acao_oferta
 #Ação Solidária de Oferta + Itens
 class AsoItemSerializer(serializers.ModelSerializer):
-    localidade_coordenada = LocalidadeCoordenadasSerializer()
+    localidade = LocalidadeCoordenadasSerializer()
     itens_acao = ItemOfertaSerializer(many=True)
     class Meta:
         model = AcaoSolidariaOferta
         #fields = '__all__'
-        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade_coordenada', 'itens_acao']
+        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade', 'itens_acao']
         read_only_fields = ['id', 'organizacao']
     def create(self, validated_data):
         user =  self.context['request'].user
         organizacao = Organizacao.objects.get(representante__user = user)
         itens_acao_data = validated_data.pop('itens_acao')
-        localidade_coordenada_data = validated_data.pop('localidade_coordenada')
-        localidade_data = localidade_coordenada_data.pop('localidade')
-        #coordenadas_data = localidade_coordenada_data.pop('coordenadas')
+        localidade_data = validated_data.pop('localidade')
+        coordenadas_data = localidade_data.pop('coordenadas')
         localidade = Localidade.objects.create(**localidade_data)
         coordenadas = Coordenada.objects.create(localidade, **localidade_coordenada_data)
-        #localidade_data = validated_data.pop('localidade')
-        #localidade = Localidade.objects.create(**localidade_data)
         acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
         for item_acao_data in itens_acao_data:
             saldo = item_acao_data['qtd_inicial']
