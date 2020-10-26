@@ -159,11 +159,18 @@ class ASDemandaViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(organizacao=org)
         return queryset
 ##################################
+class ASOfertaCoordenadasAPIView(generics.ListAPIView):
+    serializer_class = ASOfertaSerializer
+    permission_classes = (permissions.AllowAny,)
+    pagination_class = None
+    queryset = AcaoSolidariaOferta.objects.all()
+
 class ASDemandaCoordenadasAPIView(generics.ListAPIView):
     serializer_class = ASDemandaCoordenadasSerializer
     permission_classes = (permissions.AllowAny,)
+    pagination_class = None
     queryset = AcaoSolidariaDemanda.objects.all()
-        
+     
 
 #CRIAR ROTAS DAS AS JÁ COM OS ITENS
 class AsdItemViewSet(viewsets.ModelViewSet):
