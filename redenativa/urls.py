@@ -32,7 +32,9 @@ from app.api import (
     TipoTerritorioAPIView,
     MyOrganizacaoAPIView,
     ASDemandaViewSet,
-    IndicacaoAPIView
+    IndicacaoAPIView,
+    CoordenadaViewSet,
+    LocalidadeCoordenadasViewSet
 )
 #Arquivos estáticos
 from django.conf import settings
@@ -49,6 +51,8 @@ router.register(r'asdemanda', ASDemandaViewSet)
 router.register(r'itemdemanda', ItemDemandaViewSet)
 router.register(r'asoitem', AsoItemViewSet)
 router.register(r'asditem', AsdItemViewSet)
+router.register(r'coordenadas', CoordenadaViewSet)
+router.register(r'localidade-coordenadas', LocalidadeCoordenadasViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),

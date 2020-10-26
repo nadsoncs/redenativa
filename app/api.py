@@ -17,7 +17,8 @@ from app.models import (
     Categoria, 
     TipoTerritorio, 
     Representante,
-    Indicacao
+    Indicacao,
+    Coordenada
 )
 from app.serializers import (
     AceiteTermoSerializer, 
@@ -35,7 +36,9 @@ from app.serializers import (
     CategoriaSerializer, 
     TipoTerritorioSerializer,
     RepresentanteSerializer,
-    IndicacaoSerializer
+    IndicacaoSerializer,
+    CoordenadaSerializer,
+    LocalidadeCoordenadasSerializer
 )
 
 
@@ -51,6 +54,13 @@ class LocalidadeViewSet(viewsets.ModelViewSet):
     serializer_class = LocalidadeSerializer
     queryset = Localidade.objects.all()
 ##CRIAR VIEWSET DE COORDENADAS
+class CoordenadaViewSet(viewsets.ModelViewSet):
+    serializer_class = CoordenadaSerializer
+    queryset = Coordenada.objects.all()
+
+class LocalidadeCoordenadasViewSet(viewsets.ModelViewSet):
+    serializer_class = LocalidadeCoordenadasSerializer
+    queryset = Localidade.objects.all()
 
 class OrganizacaoViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizacaoSerializer

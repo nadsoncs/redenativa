@@ -108,7 +108,7 @@ class Coordenada(models.Model):
     localidade = models.OneToOneField(Localidade, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    raio = models.FloatField()
+    raio = models.FloatField(default=0)
 
 class Organizacao(models.Model):
     name = models.CharField(max_length=100, verbose_name='nome')
