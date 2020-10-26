@@ -95,7 +95,7 @@ class OrganizacaoCoordenadasSerializer(serializers.ModelSerializer):
     localidade = LocalidadeCoordenadasSerializer()
     class Meta:
         model = Organizacao
-        fields = ['id','name', 'tipo', 'email', 'tel', 'localidade']
+        fields = ['id','name', 'tipo', 'email', 'tel', 'localidade', 'logo']
 
 class OrgMimSerializer(serializers.ModelSerializer):
     class Meta:
@@ -236,6 +236,14 @@ class ASDemandaSerializer(serializers.ModelSerializer):
         organizacao = Organizacao.objects.get(representante__user = user)
         acao_demanda = AcaoSolidariaDemanda.objects.create(organizacao=organizacao, **validated_data)
         return acao_demanda
+
+class ASOfertaCoordenadasSerializer(serializers.ModelSerializer):
+    organizacao = OrganizacaoSerializer()
+    localidade = LocalidadeCoordenadasSerializer()
+    class Meta:
+        model = AcaoSolidariaOferta
+        #fields = '__all__'
+        fields = ['id','name', 'descricao', 'is_covid', 'data', 'validade', 'organizacao', 'categoria', 'localidade']
 
 class ASDemandaCoordenadasSerializer(serializers.ModelSerializer):
     organizacao = OrganizacaoCoordenadasSerializer()

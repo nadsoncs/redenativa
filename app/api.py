@@ -39,7 +39,8 @@ from app.serializers import (
     IndicacaoSerializer,
     CoordenadaSerializer,
     LocalidadeCoordenadasSerializer,
-    ASDemandaCoordenadasSerializer
+    ASDemandaCoordenadasSerializer,
+    ASOfertaCoordenadasSerializer
 )
 
 
@@ -160,7 +161,7 @@ class ASDemandaViewSet(viewsets.ModelViewSet):
         return queryset
 ##################################
 class ASOfertaCoordenadasAPIView(generics.ListAPIView):
-    serializer_class = ASOfertaSerializer
+    serializer_class = ASOfertaCoordenadasSerializer
     permission_classes = (permissions.AllowAny,)
     pagination_class = None
     queryset = AcaoSolidariaOferta.objects.all()
