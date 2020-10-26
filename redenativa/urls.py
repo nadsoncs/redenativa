@@ -34,7 +34,8 @@ from app.api import (
     ASDemandaViewSet,
     IndicacaoAPIView,
     CoordenadaViewSet,
-    LocalidadeCoordenadasViewSet
+    LocalidadeCoordenadasViewSet,
+    ASDemandaCoordenadasAPIView
 )
 #Arquivos estáticos
 from django.conf import settings
@@ -64,5 +65,6 @@ urlpatterns = [
     path('categoria/', CategoriaAPIView.as_view()),
     path('territorio/', TipoTerritorioAPIView.as_view()),
     path('myorg/', MyOrganizacaoAPIView.as_view()),
-   path('indicacao/', IndicacaoAPIView.as_view()),
+    path('indicacao/', IndicacaoAPIView.as_view()),
+    path('asdemanda-coord/', ASDemandaCoordenadasAPIView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

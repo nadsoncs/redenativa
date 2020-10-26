@@ -38,7 +38,8 @@ from app.serializers import (
     RepresentanteSerializer,
     IndicacaoSerializer,
     CoordenadaSerializer,
-    LocalidadeCoordenadasSerializer
+    LocalidadeCoordenadasSerializer,
+    ASDemandaCoordenadasSerializer
 )
 
 
@@ -157,6 +158,12 @@ class ASDemandaViewSet(viewsets.ModelViewSet):
         if org is not None:
             queryset = queryset.filter(organizacao=org)
         return queryset
+##################################
+class ASDemandaCoordenadasAPIView(generics.ListAPIView):
+    serializer_class = ASDemandaCoordenadasSerializer
+    permission_classes = (permissions.AllowAny,)
+    queryset = AcaoSolidariaDemanda.objects.all()
+        
 
 #CRIAR ROTAS DAS AS JÁ COM OS ITENS
 class AsdItemViewSet(viewsets.ModelViewSet):
