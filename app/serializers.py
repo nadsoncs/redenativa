@@ -197,9 +197,9 @@ class ASOfertaSerializer(serializers.ModelSerializer):
         user =  self.context['request'].user
         organizacao = Organizacao.objects.get(representante__user = user)
         localidade_data = validated_data.pop('localidade')
-        coordenadas_data = localidade_data.pop('coordenadas')
+        coordenada_data = localidade_data.pop('coordenada')
         localidade = Localidade.objects.create(**localidade_data)
-        coordenadas = Coordenada.objects.create(localidade, **localidade_coordenada_data)
+        coordenada = Coordenada.objects.create(localidade, **localidade_coordenada_data)
         acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
         return acao_oferta
 #Ação Solidária de Oferta + Itens
@@ -216,9 +216,9 @@ class AsoItemSerializer(serializers.ModelSerializer):
         organizacao = Organizacao.objects.get(representante__user = user)
         itens_acao_data = validated_data.pop('itens_acao')
         localidade_data = validated_data.pop('localidade')
-        coordenadas_data = localidade_data.pop('coordenadas')
+        coordenada_data = localidade_data.pop('coordenada')
         localidade = Localidade.objects.create(**localidade_data)
-        coordenadas = Coordenada.objects.create(localidade, **localidade_coordenada_data)
+        coordenada = Coordenada.objects.create(localidade, **localidade_coordenada_data)
         acao_oferta = AcaoSolidariaOferta.objects.create(organizacao=organizacao, localidade=localidade, **validated_data)
         for item_acao_data in itens_acao_data:
             saldo = item_acao_data['qtd_inicial']
