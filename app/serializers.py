@@ -178,7 +178,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class ItemOfertaSerializer(serializers.ModelSerializer):
     item = serializers.StringRelatedField()
-    item_id = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all(), write_only=True, source='item')
+    item_id = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all(), write_only=True, source='item')
     class Meta:
         model = ItemAcaoOferta
         fields = ['id', 'a_s_oferta', 'item', 'qtd_inicial', 'saldo', 'item_id']
@@ -256,7 +256,7 @@ class ASDemandaCoordenadasSerializer(serializers.ModelSerializer):
 
 class ItemDemandaSerializer(serializers.ModelSerializer):
     item = serializers.StringRelatedField()
-    item_id = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all(), write_only=True, source='item')
+    item_id = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all(), write_only=True, source='item')
     class Meta:
         model = ItemAcaoDemanda
         #fields = '__all__'
