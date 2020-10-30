@@ -177,9 +177,11 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ItemOfertaSerializer(serializers.ModelSerializer):
+    item = serializers.StringRelatedField()
+    item_id = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all(), write_only=True, source='item')
     class Meta:
         model = ItemAcaoOferta
-        fields = ['id', 'a_s_oferta', 'item', 'qtd_inicial', 'saldo']
+        fields = ['id', 'a_s_oferta', 'item', 'qtd_inicial', 'saldo', 'item_id']
         read_only_fields = ['id', 'saldo', 'a_s_oferta']
     def create(self, validated_data):
         saldo = validated_data['qtd_inicial']
@@ -253,10 +255,12 @@ class ASDemandaCoordenadasSerializer(serializers.ModelSerializer):
         fields = ['id','name', 'descricao', 'is_covid', 'num_familias','data', 'validade', 'organizacao', 'categoria']
 
 class ItemDemandaSerializer(serializers.ModelSerializer):
+    item = serializers.StringRelatedField()
+    item_id = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all(), write_only=True, source='item')
     class Meta:
         model = ItemAcaoDemanda
         #fields = '__all__'
-        fields = ['id', 'a_s_demanda', 'item', 'qtd_inicial', 'saldo']
+        fields = ['id', 'a_s_demanda', 'item', 'qtd_inicial', 'saldo', 'item_id']
         read_only_fields = ['id', 'saldo', 'a_s_demanda']
     def create(self, validated_data):
         saldo = validated_data['qtd_inicial']
