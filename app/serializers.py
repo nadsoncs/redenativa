@@ -266,10 +266,14 @@ class ItemDemandaSerializer(serializers.ModelSerializer):
 #Ação Solidária de Oferta + Itens
 class AsdItemSerializer(serializers.ModelSerializer):
     itens_acao = ItemDemandaSerializer(many=True)
+    #categoria = CategoriaSerializer()
+    #categoria = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all())
+    categoria = serializers.StringRelatedField()
+    categoria_id = serializers.PrimaryKeyRelatedField(queryset=Categoria.objects.all(), write_only=True, source='categoria')
     class Meta:
         model = AcaoSolidariaDemanda
         #fields = '__all__'
-        fields = ['id','name', 'descricao', 'is_covid', 'num_familias', 'data', 'validade', 'organizacao', 'categoria', 'itens_acao']
+        fields = ['id','name', 'descricao', 'is_covid', 'num_familias', 'data', 'validade', 'organizacao', 'categoria', 'categoria_id', 'itens_acao']
         read_only_fields = ['id', 'organizacao']
     def create(self, validated_data):
         user =  self.context['request'].user
